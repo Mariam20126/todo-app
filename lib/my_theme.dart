@@ -9,7 +9,9 @@ class MyTheme{
   static Color blackColor=Color(0xff383838);
   static Color redColor=Color(0xffEC4B4B);
   static Color geyColor=Color(0xffC8C9CB);
-  static Color  darkBlackColor=Color(0xff141922);
+  static Color  darkBlackColor=Color(0xff060E1E);
+  static Color  darkBlack=Color(0xff141922);
+
 
   static ThemeData lightTheme =ThemeData(
     primaryColor: primaryLight,
@@ -51,5 +53,45 @@ class MyTheme{
     ),
 
   ));
+  static ThemeData darkTheme =ThemeData(
+      primaryColor: primaryLight,
+      scaffoldBackgroundColor: darkBlackColor,
+      appBarTheme: AppBarTheme(
+        backgroundColor: primaryLight,
+        toolbarHeight: 190,
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: primaryLight,
+          unselectedItemColor: whiteColor,
+          showUnselectedLabels: false,
+          backgroundColor: darkBlack,
+          elevation: 0
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: primaryLight),
+      bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: darkBlack,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(
+            topLeft:Radius.circular(15) ,
+            topRight: Radius.circular(15) ,
+          ))
+      ),
+      textTheme: TextTheme(
+        titleLarge: TextStyle(
+            color: whiteColor,
+            fontSize: 22,
+            fontWeight: FontWeight.bold
+        ),
+        titleMedium: TextStyle(
+            color: whiteColor,
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+        ),
+        titleSmall: TextStyle(
+            color: whiteColor,
+            fontSize: 18,
+            fontWeight: FontWeight.bold
+        ),
+
+      ));
 
 }
