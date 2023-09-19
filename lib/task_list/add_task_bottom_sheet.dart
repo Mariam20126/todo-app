@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:todo_app/my_theme.dart';
+import 'package:todo_app/providers/app_config_provider.dart';
+import 'package:provider/provider.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   const AddTaskBottomSheet({super.key});
@@ -12,12 +16,15 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   var formKey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
+
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(12),
         child: Column(
           children: [
-            Text('Add New Task',style: Theme.of(context).textTheme.titleMedium,),
+            Text(AppLocalizations.of(context)!.add_new_task,
+              style: Theme.of(context).textTheme.titleMedium,),
             Form(key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -25,13 +32,23 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+
                         validator: (text) {
                           if(text==null||text.isEmpty){
-                            return 'please enter the task title';
+                            return AppLocalizations.of(context)!.please_enter_the_task_title;
                           }
                           return null ;
                         },
-                        decoration: InputDecoration(label: Text('Enter Task Title')),
+                        decoration: InputDecoration(label: Text(
+                          AppLocalizations.of(context)!.enter_task_title,
+                          style: TextStyle(color:provider.isDarkMood() ?
+                          MyTheme.whiteColor
+                              :
+                          MyTheme.blackColor
+
+                          ),
+                        )
+                        ),
                       ),
                     ),
                     Padding(
@@ -39,17 +56,25 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                       child: TextFormField(
                         validator: (text) {
                           if(text==null||text.isEmpty){
-                            return 'please enter the task describtion';
+                            return AppLocalizations.of(context)!.please_enter_the_task_describtion;
                           }
                           return null ;
                         },
-                        decoration: InputDecoration(label: Text('Enter Task Describtion')),
+                        decoration: InputDecoration(label: Text(
+                          AppLocalizations.of(context)!.enter_task_descrition,
+                          style: TextStyle(color:provider.isDarkMood() ?
+                          MyTheme.whiteColor
+                              :
+                          MyTheme.blackColor
+
+                          ),
+                        )),
                         maxLines: 5,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Select Date',
+                      child: Text(AppLocalizations.of(context)!.select_date,
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ),
@@ -69,7 +94,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         onPressed: (){
                           addTask();
                         },
-                        child: Text('Add',
+                        child: Text(AppLocalizations.of(context)!.add,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                     ),

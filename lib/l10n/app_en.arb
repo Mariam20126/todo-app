@@ -1,0 +1,28 @@
+{
+"to_do_list" : "To Do List",
+"settings" : "Settings",
+"task_list" : "Task List",
+"task_title" : "Task Title",
+"desc" : "Desc",
+"delete" : "Delete",
+"add_new_task" : "Add New Task",
+"enter_task_title" : "Enter Task Title",
+"enter_task_descrition" : "Enter Task Describtion",
+"select_date" : "Select Date",
+"add" : "Add",
+"language" : "Language",
+"arabic" : "Arabic",
+"english" : "English",
+"mood" : "Mood",
+"light" : "Light",
+"dark" : "Dark",
+"edit_task" : "Edit Task",
+"this_is_title" : "This Is Title",
+"task_details" : "Task Details",
+"save_changes" : "Save Changes",
+"please_enter_the_task_title" : "Please Enter The Task Title",
+"please_enter_the_task_describtion" : "Please Enter The Task Describtion"
+
+
+
+}
