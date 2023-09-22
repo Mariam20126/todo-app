@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/app_config_provider.dart';
 
@@ -15,13 +16,13 @@ class _themeBottomSheetState extends State<themeBottomSheet> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
-
+    var prefs =SharedPreferences.getInstance();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         InkWell(
           onTap: () {
-            provider.changeTheme(ThemeMode.dark);
+            provider.changeTheme(prefs.toString());
           },
           child: provider.isDarkMood()
               ? getSelectedItemWidget(AppLocalizations.of(context)!.dark)
@@ -29,7 +30,7 @@ class _themeBottomSheetState extends State<themeBottomSheet> {
         ),
         InkWell(
           onTap: () {
-            provider.changeTheme(ThemeMode.light);
+            provider.changeTheme(prefs.toString());
           },
           child: provider.isDarkMood()
               ? getUnSelectedItemWidget(AppLocalizations.of(context)!.light)

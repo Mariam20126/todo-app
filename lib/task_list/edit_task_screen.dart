@@ -39,103 +39,105 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                       :
                   MyTheme.whiteColor
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(AppLocalizations.of(context)!.edit_task,
-                      style: Theme.of(context).textTheme.titleMedium,),
-                  ),
-                  Form(key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            validator: (text) {
-                              if(text==null||text.isEmpty){
-                                return AppLocalizations.of(context)!.please_enter_the_task_title;
-                              }
-                              return null ;
-                            },
-                            decoration: InputDecoration(label: Text(
-                              AppLocalizations.of(context)!.this_is_title,
-                              style: TextStyle(color:provider.isDarkMood() ?
-                              MyTheme.whiteColor
-                                  :
-                              MyTheme.blackColor
-
-                              ),
-                            )),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            validator: (text) {
-                              if(text==null||text.isEmpty){
-                                return AppLocalizations.of(context)!.please_enter_the_task_describtion;
-                              }
-                              return null ;
-                            },
-                            decoration: InputDecoration(label: Text(
-                              AppLocalizations.of(context)!.task_details,
-                              style: TextStyle(color:provider.isDarkMood() ?
-                              MyTheme.whiteColor
-                                  :
-                              MyTheme.blackColor
-
-                              ),
-                            )),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(AppLocalizations.of(context)!.select_date,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: (){
-                            showCalender();
-                          },
-                          child: Padding(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(AppLocalizations.of(context)!.edit_task,
+                        style: Theme.of(context).textTheme.titleMedium,),
+                    ),
+                    Form(key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text('${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
+                            child: TextFormField(
+                              validator: (text) {
+                                if(text==null||text.isEmpty){
+                                  return AppLocalizations.of(context)!.please_enter_the_task_title;
+                                }
+                                return null ;
+                              },
+                              decoration: InputDecoration(label: Text(
+                                AppLocalizations.of(context)!.this_is_title,
+                                style: TextStyle(color:provider.isDarkMood() ?
+                                MyTheme.whiteColor
+                                    :
+                                MyTheme.blackColor
+
+                                ),
+                              )),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(40.0),
-                          child: ElevatedButton(
-                            onPressed: (){
-                              addTask();
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              validator: (text) {
+                                if(text==null||text.isEmpty){
+                                  return AppLocalizations.of(context)!.please_enter_the_task_describtion;
+                                }
+                                return null ;
+                              },
+                              decoration: InputDecoration(label: Text(
+                                AppLocalizations.of(context)!.task_details,
+                                style: TextStyle(color:provider.isDarkMood() ?
+                                MyTheme.whiteColor
+                                    :
+                                MyTheme.blackColor
+
+                                ),
+                              )),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(AppLocalizations.of(context)!.select_date,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: (){
+                              showCalender();
                             },
                             child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Text(AppLocalizations.of(context)!.save_changes,
-                                style: Theme.of(context).textTheme.titleLarge,
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+                                style: Theme.of(context).textTheme.titleSmall,
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  // Change your radius here
-                                  borderRadius: BorderRadius.circular(30),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(40.0),
+                            child: ElevatedButton(
+                              onPressed: (){
+                                addTask();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Text(AppLocalizations.of(context)!.save_changes,
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              ),
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    // Change your radius here
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
 
-                ],
-              ),
+                  ],
+                ),
             )
           ],
         ),
+              ),
     )]));
   }
 

@@ -113,7 +113,6 @@ class _SettingsTabState extends State<SettingsTab> {
   void showThemeBottomSheet() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        backgroundColor: Colors.brown,
         context: context,
         builder: (context) => themeBottomSheet());
   }
