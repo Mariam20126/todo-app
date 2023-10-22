@@ -1,49 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/firebase_utils.dart';
+import 'package:todo_app/model/task.dart';
 import 'package:todo_app/my_theme.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todo_app/providers/app_config_provider.dart';
 import 'package:todo_app/task_list/edit_task_screen.dart';
 import 'package:provider/provider.dart';
-
-
-class TaskWidget extends StatelessWidget {
-  const TaskWidget({super.key});
-
+class TaskWidget extends StatefulWidget {
+  Task task;
+  TaskWidget({required this.task});
+  @override
+  State<TaskWidget> createState() => _TaskWidgetState();
+}
+class _TaskWidgetState extends State<TaskWidget> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
-
-    return
-      Slidable(
-      startActionPane: ActionPane(
-        extentRatio: .25,
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-            borderRadius: BorderRadius.circular(20),
-            onPressed: (context) {},
-            backgroundColor: MyTheme.redColor,
-            foregroundColor: MyTheme.whiteColor,
-            icon: Icons.delete,
-            label: AppLocalizations.of(context)!.delete,
-          ),
-        ],
-      ),
-      child:
-      InkWell(
-        onTap: (){
-          Navigator.of(context).pushNamed(EditTaskScreen.routeName);
-        },
+    return Container(
+      margin: EdgeInsets.all(12),
+      child: Slidable(
+        startActionPane: ActionPane(
+          extentRatio: .25,
+          motion: const ScrollMotion(),
+          children: [
+            SlidableAction(
+              borderRadius: BorderRadius.circular(20),
+              onPressed: (context) {
+                FireBaseUtils.deleteTaskFromFireStore(widget.task)
+                    .timeout(Duration(milliseconds: 500), onTimeout: () {
+                  print('todo deleted');
+                  provider.getAllTasksFromFirestore();
+                });
+              },
+              backgroundColor: MyTheme.redColor,
+              foregroundColor: MyTheme.whiteColor,
+              icon: Icons.delete,
+              label: AppLocalizations.of(context)!.delete,
+            ),
+          ],
+        ),
         child: Container(
-          margin: EdgeInsets.all(12),
           padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), color:provider.isDarkMood() ?
-          MyTheme.darkBlack
-          :
-          MyTheme.whiteColor
-          ),
+              borderRadius: BorderRadius.circular(15),
+              color: provider.isDarkMood()
+                  ? MyTheme.darkBlack
+                  : MyTheme.whiteColor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -53,25 +56,35 @@ class TaskWidget extends StatelessWidget {
                 width: 6,
               ),
               Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      AppLocalizations.of(context)!.task_title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(color: Theme.of(context).primaryColor),
+                  child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    EditTaskScreen.routeName,
+                    arguments: DataOfTask(
+                        title1: widget.task.title ?? '',
+                        desc1: widget.task.description ?? ''),
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        widget.task.title ?? '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(color: Theme.of(context).primaryColor),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(AppLocalizations.of(context)!.desc,
-                        style: Theme.of(context).textTheme.titleSmall),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(widget.task.description ?? '',
+                          style: Theme.of(context).textTheme.titleSmall),
+                    ),
+                  ],
+                ),
               )),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 21, vertical: 7),
@@ -79,10 +92,15 @@ class TaskWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   color: Theme.of(context).primaryColor,
                 ),
-                child: Icon(
-                  Icons.check,
-                  size: 35,
-                  color: MyTheme.whiteColor,
+                child: InkWell(
+                  onTap: () {
+                    TaskFinished();
+                  },
+                  child: Icon(
+                    Icons.check,
+                    size: 35,
+                    color: MyTheme.whiteColor,
+                  ),
                 ),
               ),
             ],
@@ -90,5 +108,9 @@ class TaskWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void TaskFinished() {
+
   }
 }
