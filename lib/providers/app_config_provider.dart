@@ -1,32 +1,40 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:todo_app/firebase_utils.dart';
+import 'package:todo_app/model/task.dart';
 class AppConfigProvider extends ChangeNotifier {
-  String appLanguage ='ar';
- late String appTheme ;
+  String appLanguage ='en';
+  ThemeMode appTheme =ThemeMode.light ;
 
-  void changeLanguage(String newLanguage) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void changeLanguage(String newLanguage)  {
     if (appLanguage == newLanguage) {
-      prefs.setString('appLanguage', appLanguage);
+      return ;
     }
     appLanguage = newLanguage;
-    prefs.setString('appLanguage', newLanguage);
     notifyListeners();
   }
 
-  void changeTheme(String newMood) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void changeTheme(ThemeMode newMood)  {
     if (appTheme == newMood) {
-      prefs.setString('appTheme', appTheme);
+      return ;
     }
     appTheme = newMood;
-    prefs.setString('appTheme', newMood);
     notifyListeners();
   }
 
   bool isDarkMood() {
     return appTheme == ThemeMode.dark;
+  }
+
+  List<Task> taskList = [];
+  void getAllTasksFromFirestore() async {
+    QuerySnapshot<Task> querySnapshot =
+    await FireBaseUtils.getTasksCollection().get();
+    taskList = querySnapshot.docs.map((doc) {
+      return doc.data();
+    }).toList();
+    notifyListeners();
+
   }
 
 

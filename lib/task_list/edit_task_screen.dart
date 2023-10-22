@@ -16,8 +16,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   var formKey=GlobalKey<FormState>();
   DateTime selectedDate =DateTime.now();
   Widget build(BuildContext context) {
+    String taskTitle='';
+    String taskDescription ='';
     var provider = Provider.of<AppConfigProvider>(context);
-
+    DataOfTask args=ModalRoute.of(context)?.settings.arguments as DataOfTask;
     return
       Scaffold(
         appBar: AppBar(
@@ -54,14 +56,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-                              validator: (text) {
-                                if(text==null||text.isEmpty){
-                                  return AppLocalizations.of(context)!.please_enter_the_task_title;
-                                }
-                                return null ;
+                              onChanged: (text){
+                                taskTitle=text;
                               },
                               decoration: InputDecoration(label: Text(
-                                AppLocalizations.of(context)!.this_is_title,
+                                args.title1,
                                 style: TextStyle(color:provider.isDarkMood() ?
                                 MyTheme.whiteColor
                                     :
@@ -69,19 +68,17 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
                                 ),
                               )),
+
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-                              validator: (text) {
-                                if(text==null||text.isEmpty){
-                                  return AppLocalizations.of(context)!.please_enter_the_task_describtion;
-                                }
-                                return null ;
+                              onChanged: (text){
+                                taskDescription=text;
                               },
                               decoration: InputDecoration(label: Text(
-                                AppLocalizations.of(context)!.task_details,
+                                args.desc1,
                                 style: TextStyle(color:provider.isDarkMood() ?
                                 MyTheme.whiteColor
                                     :
@@ -161,4 +158,9 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
     }
   }
+}
+class DataOfTask{
+  String title1;
+  String desc1;
+  DataOfTask({required this.title1,required this.desc1});
 }
