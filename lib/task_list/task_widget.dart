@@ -19,7 +19,8 @@ class _TaskWidgetState extends State<TaskWidget> {
     var provider = Provider.of<AppConfigProvider>(context);
     return Container(
       margin: EdgeInsets.all(12),
-      child: Slidable(
+      child:
+      Slidable(
         startActionPane: ActionPane(
           extentRatio: .25,
           motion: const ScrollMotion(),
@@ -51,19 +52,14 @@ class _TaskWidgetState extends State<TaskWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                color: Theme.of(context).primaryColor,
+                color:widget.task.isDone!?MyTheme.greenLight: Theme.of(context).primaryColor,
                 height: 80,
                 width: 6,
               ),
               Expanded(
                   child: InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(
-                    EditTaskScreen.routeName,
-                    arguments: DataOfTask(
-                        title1: widget.task.title ?? '',
-                        desc1: widget.task.description ?? ''),
-                  );
+                  Navigator.pushNamed(context, EditTaskScreen.routeName,arguments: widget.task);
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,7 +71,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                         style: Theme.of(context)
                             .textTheme
                             .titleSmall
-                            ?.copyWith(color: Theme.of(context).primaryColor),
+                            ?.copyWith(color:widget.task.isDone!?MyTheme.greenLight: Theme.of(context).primaryColor),
                       ),
                     ),
                     Padding(
@@ -86,16 +82,26 @@ class _TaskWidgetState extends State<TaskWidget> {
                   ],
                 ),
               )),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 21, vertical: 7),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Theme.of(context).primaryColor,
-                ),
-                child: InkWell(
-                  onTap: () {
-                    TaskFinished();
-                  },
+              InkWell(
+                onTap:(){
+                  widget.task.isDone=!widget.task.isDone!;
+                  FireBaseUtils.editIsDone(widget.task);
+                  setState(() {
+                  });
+                } ,
+                child: widget.task.isDone!?
+                    Text('IsDone!',style: TextStyle(
+                      color: MyTheme.greenLight,
+                      fontWeight:FontWeight.bold ,
+                      fontSize: 22
+                    ),)
+                    :
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 21, vertical: 7),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Theme.of(context).primaryColor,
+                  ),
                   child: Icon(
                     Icons.check,
                     size: 35,
@@ -110,7 +116,4 @@ class _TaskWidgetState extends State<TaskWidget> {
     );
   }
 
-  void TaskFinished() {
-
-  }
 }

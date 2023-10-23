@@ -25,16 +25,33 @@ class AppConfigProvider extends ChangeNotifier {
   bool isDarkMood() {
     return appTheme == ThemeMode.dark;
   }
-
+  DateTime selectedDate=DateTime.now();
   List<Task> taskList = [];
   void getAllTasksFromFirestore() async {
-    QuerySnapshot<Task> querySnapshot =
-    await FireBaseUtils.getTasksCollection().get();
+    QuerySnapshot<Task> querySnapshot = await FireBaseUtils.getTasksCollection().get();
     taskList = querySnapshot.docs.map((doc) {
       return doc.data();
     }).toList();
+    taskList=taskList.where((task) {
+      if(task.dateTime?.day==selectedDate.day&&
+          task.dateTime?.month==selectedDate.month&&
+          task.dateTime?.year==selectedDate.year
+      ){
+        return true;
+      }
+      return false;
+    }).toList( );
+    taskList.sort(
+            (Task task1,Task task2){
+              return task1.dateTime!.compareTo(task2.dateTime!);
+    }
+    );
     notifyListeners();
 
+  }
+  void setNewSelectedDate(DateTime newDate){
+    selectedDate=newDate;
+    getAllTasksFromFirestore();
   }
 
 
