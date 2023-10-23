@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/firebase_utils.dart';
+import 'package:todo_app/model/task.dart';
 import 'package:todo_app/my_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -12,14 +14,29 @@ class EditTaskScreen extends StatefulWidget {
 }
 
 class _EditTaskScreenState extends State<EditTaskScreen> {
+  late Task task;
+  late AppConfigProvider provider1;
+  var TitleController=TextEditingController();
+  var DescriptionController =TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      task=ModalRoute.of(context)!.settings.arguments as Task;
+      TitleController.text=task.title!;
+      DescriptionController.text=task.description!;
+      selectedDate=task.dateTime!;
+
+    });
+  }
   @override
   var formKey=GlobalKey<FormState>();
+
   DateTime selectedDate =DateTime.now();
   Widget build(BuildContext context) {
-    String taskTitle='';
-    String taskDescription ='';
     var provider = Provider.of<AppConfigProvider>(context);
-    DataOfTask args=ModalRoute.of(context)?.settings.arguments as DataOfTask;
+    provider1=Provider.of<AppConfigProvider>(context);
     return
       Scaffold(
         appBar: AppBar(
@@ -56,36 +73,16 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-                              onChanged: (text){
-                                taskTitle=text;
-                              },
-                              decoration: InputDecoration(label: Text(
-                                args.title1,
-                                style: TextStyle(color:provider.isDarkMood() ?
-                                MyTheme.whiteColor
-                                    :
-                                MyTheme.blackColor
-
-                                ),
-                              )),
+                              controller: TitleController,
+                              decoration: InputDecoration(hintText: 'Enter Task Title'),
 
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-                              onChanged: (text){
-                                taskDescription=text;
-                              },
-                              decoration: InputDecoration(label: Text(
-                                args.desc1,
-                                style: TextStyle(color:provider.isDarkMood() ?
-                                MyTheme.whiteColor
-                                    :
-                                MyTheme.blackColor
-
-                                ),
-                              )),
+                              controller: DescriptionController,
+                              decoration: InputDecoration(hintText: 'Enter Task Describtion'),
                             ),
                           ),
                           Padding(
@@ -110,7 +107,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             padding: const EdgeInsets.all(40.0),
                             child: ElevatedButton(
                               onPressed: (){
-                                addTask();
+                                editTask();
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(20.0),
@@ -153,14 +150,20 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     }
   }
 
-  void addTask() {
+  void editTask() {
     if(formKey.currentState?.validate()==true){
+      task.title=TitleController.text;
+      task.description=DescriptionController.text;
+      task.dateTime=selectedDate;
+      FireBaseUtils.editTask(task).
+      timeout(
+          Duration(milliseconds: 500),onTimeout: (){
+        print('todo added successfully');
+        provider1.getAllTasksFromFirestore();
+        Navigator.pop(context);
+      }
+      );
 
     }
   }
-}
-class DataOfTask{
-  String title1;
-  String desc1;
-  DataOfTask({required this.title1,required this.desc1});
 }
